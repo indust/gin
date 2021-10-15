@@ -30,8 +30,8 @@ type Param struct {
 // It is therefore safe to read values by the index.
 type Params []Param
 
-// Get returns the value of the first Param which key matches the given name.
-// If no matching Param is found, an empty string is returned.
+// Get returns the value of the first Param which key matches the given name and a boolean true.
+// If no matching Param is found, an empty string is returned and a boolean false .
 func (ps Params) Get(name string) (string, bool) {
 	for _, entry := range ps {
 		if entry.Key == name {
@@ -101,8 +101,7 @@ func countParams(path string) uint16 {
 type nodeType uint8
 
 const (
-	static nodeType = iota // default
-	root
+	root nodeType = iota + 1
 	param
 	catchAll
 )
@@ -472,7 +471,7 @@ walk: // Outer loop for walking the tree
 					}
 
 					// Save param value
-					if params != nil {
+					if params != nil && cap(*params) > 0 {
 						if value.params == nil {
 							value.params = params
 						}
@@ -500,7 +499,7 @@ walk: // Outer loop for walking the tree
 						}
 
 						// ... but we can't
-						value.tsr = (len(path) == end+1)
+						value.tsr = len(path) == end+1
 						return
 					}
 
@@ -512,7 +511,7 @@ walk: // Outer loop for walking the tree
 						// No handle found. Check if a handle for this path + a
 						// trailing slash exists for TSR recommendation
 						n = n.children[0]
-						value.tsr = (n.path == "/" && n.handlers != nil)
+						value.tsr = n.path == "/" && n.handlers != nil
 					}
 					return
 
