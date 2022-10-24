@@ -1,9 +1,9 @@
-// Copyright 2021 Gin Core Team. All rights reserved.
+// Copyright 2022 Gin Core Team. All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-//go:build !go1.17
-// +build !go1.17
+//go:build go1.19
+// +build go1.19
 
 package gin
 
@@ -17,7 +17,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestContextFormFileFailed16(t *testing.T) {
+func TestContextFormFileFailed19(t *testing.T) {
 	buf := new(bytes.Buffer)
 	mw := multipart.NewWriter(buf)
 	mw.Close()

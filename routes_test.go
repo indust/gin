@@ -1,4 +1,4 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Copyright 2014 Manu Martinez-Almeida. All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
@@ -320,6 +320,40 @@ func TestRouteStaticFile(t *testing.T) {
 
 	w3 := PerformRequest(router, http.MethodHead, "/using_static/"+filename)
 	w4 := PerformRequest(router, http.MethodHead, "/result")
+
+	assert.Equal(t, w3, w4)
+	assert.Equal(t, http.StatusOK, w3.Code)
+}
+
+// TestHandleStaticFile - ensure the static file handles properly
+func TestRouteStaticFileFS(t *testing.T) {
+	// SETUP file
+	testRoot, _ := os.Getwd()
+	f, err := ioutil.TempFile(testRoot, "")
+	if err != nil {
+		t.Error(err)
+	}
+	defer os.Remove(f.Name())
+	_, err = f.WriteString("Gin Web Framework")
+	assert.NoError(t, err)
+	f.Close()
+
+	dir, filename := filepath.Split(f.Name())
+	// SETUP gin
+	router := New()
+	router.Static("/using_static", dir)
+	router.StaticFileFS("/result_fs", filename, Dir(dir, false))
+
+	w := PerformRequest(router, http.MethodGet, "/using_static/"+filename)
+	w2 := PerformRequest(router, http.MethodGet, "/result_fs")
+
+	assert.Equal(t, w, w2)
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "Gin Web Framework", w.Body.String())
+	assert.Equal(t, "text/plain; charset=utf-8", w.Header().Get("Content-Type"))
+
+	w3 := PerformRequest(router, http.MethodHead, "/using_static/"+filename)
+	w4 := PerformRequest(router, http.MethodHead, "/result_fs")
 
 	assert.Equal(t, w3, w4)
 	assert.Equal(t, http.StatusOK, w3.Code)

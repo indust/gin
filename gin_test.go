@@ -1,4 +1,4 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Copyright 2014 Manu Martinez-Almeida. All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
@@ -43,7 +43,7 @@ func setupHTMLFiles(t *testing.T, mode string, tls bool, loadMethod func(*Engine
 			c.HTML(http.StatusOK, "hello.tmpl", map[string]string{"name": "world"})
 		})
 		router.GET("/raw", func(c *Context) {
-			c.HTML(http.StatusOK, "raw.tmpl", map[string]interface{}{
+			c.HTML(http.StatusOK, "raw.tmpl", map[string]any{
 				"now": time.Date(2017, 07, 01, 0, 0, 0, 0, time.UTC),
 			})
 		})
@@ -100,7 +100,7 @@ func TestH2c(t *testing.T) {
 
 	url := "http://" + ln.Addr().String() + "/"
 
-	http := http.Client{
+	httpClient := http.Client{
 		Transport: &http2.Transport{
 			AllowHTTP: true,
 			DialTLS: func(netw, addr string, cfg *tls.Config) (net.Conn, error) {
@@ -109,7 +109,7 @@ func TestH2c(t *testing.T) {
 		},
 	}
 
-	res, err := http.Get(url)
+	res, err := httpClient.Get(url)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -202,7 +202,7 @@ func TestLoadHTMLGlobFromFuncMap(t *testing.T) {
 	}
 
 	resp, _ := ioutil.ReadAll(res.Body)
-	assert.Equal(t, "Date: 2017/07/01\n", string(resp))
+	assert.Equal(t, "Date: 2017/07/01", string(resp))
 }
 
 func init() {
@@ -320,7 +320,7 @@ func TestLoadHTMLFilesFuncMap(t *testing.T) {
 	}
 
 	resp, _ := ioutil.ReadAll(res.Body)
-	assert.Equal(t, "Date: 2017/07/01\n", string(resp))
+	assert.Equal(t, "Date: 2017/07/01", string(resp))
 }
 
 func TestAddRoute(t *testing.T) {
@@ -467,7 +467,7 @@ func TestNoMethodWithGlobalHandlers(t *testing.T) {
 	compareFunc(t, router.allNoMethod[2], middleware0)
 }
 
-func compareFunc(t *testing.T, a, b interface{}) {
+func compareFunc(t *testing.T, a, b any) {
 	sf1 := reflect.ValueOf(a)
 	sf2 := reflect.ValueOf(b)
 	if sf1.Pointer() != sf2.Pointer() {
