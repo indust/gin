@@ -1,5 +1,16 @@
 # Gin ChangeLog
 
+## Gin v1.8.2
+
+### Bugs
+
+* fix(route): redirectSlash bug ([#3227]((https://github.com/gin-gonic/gin/pull/3227)))
+* fix(engine): missing route params for CreateTestContext ([#2778]((https://github.com/gin-gonic/gin/pull/2778))) ([#2803]((https://github.com/gin-gonic/gin/pull/2803)))
+
+### Security
+
+* Fix the GO-2022-1144 vulnerability ([#3432]((https://github.com/gin-gonic/gin/pull/3432)))
+
 ## Gin v1.8.1
 
 ### ENHANCEMENTS
@@ -113,7 +124,7 @@
 * chore(performance): improve countParams ([#2378](https://github.com/gin-gonic/gin/pull/2378))
 * Remove some functions that have the same effect as the bytes package ([#2387](https://github.com/gin-gonic/gin/pull/2387))
 * update:SetMode function ([#2321](https://github.com/gin-gonic/gin/pull/2321))
-* remove a unused type SecureJSONPrefix ([#2391](https://github.com/gin-gonic/gin/pull/2391))
+* remove an unused type SecureJSONPrefix ([#2391](https://github.com/gin-gonic/gin/pull/2391))
 * Add a redirect sample for POST method ([#2389](https://github.com/gin-gonic/gin/pull/2389))
 * Add CustomRecovery builtin middleware ([#2322](https://github.com/gin-gonic/gin/pull/2322))
 * binding: avoid 2038 problem on 32-bit architectures ([#2450](https://github.com/gin-gonic/gin/pull/2450))
